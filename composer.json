@@ -1,0 +1,31 @@
+{
+    "name": "greensight/laravel-stdout-logs-helper",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Koryukov",
+            "email": "koryukov@greensight.ru",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3 || ^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Greensight\\LaravelStdoutLogsHelper\\": "src/"
+        }
+    },
+    "require-dev": {
+        "illuminate/support": "^8.53",
+        "monolog/monolog": "^2.3",
+        "phpunit/phpunit": "^9.5",
+        "friendsofphp/php-cs-fixer": "^2.16"
+    },
+    "scripts": {
+        "cs": "php-cs-fixer fix --config .php_cs",
+        "test": "phpunit --no-coverage",
+        "test-coverage": "XDEBUG_MODE=coverage phpunit"
+    }
+}
