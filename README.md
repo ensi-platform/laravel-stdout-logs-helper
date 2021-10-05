@@ -4,7 +4,7 @@
 
 ## Установка
 
-1. `composer require greensight/laravel-stdout-logs-helper`
+1. `composer require ensi/laravel-stdout-logs-helper`
 2. Оберните описание каналов логирования в `config/logging.php` в вызов `LaravelStdoutLogsHelper::addStdoutStacks()`
 3. Добавляйте новые каналы логирования используя вспомогательные функции
 

@@ -1,6 +1,6 @@
 <?php
 
-use Greensight\LaravelStdoutLogsHelper\LaravelStdoutLogsHelper;
+use Ensi\LaravelStdoutLogsHelper\LaravelStdoutLogsHelper;
 use PHPUnit\Framework\TestCase;
 
 class ChannelHelperTest extends TestCase

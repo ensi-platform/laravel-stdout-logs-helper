@@ -1,6 +1,6 @@
 <?php
 
-namespace Greensight\LaravelStdoutLogsHelper;
+namespace Ensi\LaravelStdoutLogsHelper;
 
 use Monolog\Handler\StreamHandler;
 
