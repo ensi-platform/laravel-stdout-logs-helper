@@ -6,8 +6,14 @@ use Monolog\Handler\StreamHandler;
 
 class LaravelStdoutLogsHelper
 {
+    public static $ignoreEnvs = ['testing'];
+
     public static function addStdoutStacks(array $config, array $mirrorDrivers = ['daily', 'single']): array
     {
+        if (self::isIgnore()) {
+            return $config;
+        }
+
         $newChannels = [];
         foreach ($config['channels'] as $name => $channelSpec) {
             $driver = $channelSpec['driver'] ?? null;
@@ -32,6 +38,10 @@ class LaravelStdoutLogsHelper
 
     public static function getNamesForStack(string $name): array
     {
+        if (self::isIgnore()) {
+            return [$name];
+        }
+
         return ["{$name}:stdout", "{$name}:original"];
     }
 
@@ -66,5 +76,14 @@ class LaravelStdoutLogsHelper
             'stdout_level' => $stdoutLevel,
             'days' => $ttlDays,
         ];
+    }
+
+    protected static function isIgnore(): bool
+    {
+        if (!function_exists('env')) {
+            return false;
+        }
+
+        return in_array(env('APP_ENV', 'production'), self::$ignoreEnvs);
     }
 }
