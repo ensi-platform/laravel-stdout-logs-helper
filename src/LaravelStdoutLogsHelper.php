@@ -8,6 +8,10 @@ class LaravelStdoutLogsHelper
 {
     public static function addStdoutStacks(array $config, array $mirrorDrivers = ['daily', 'single']): array
     {
+        if (self::isTesting()) {
+            return $config;
+        }
+
         $newChannels = [];
         foreach ($config['channels'] as $name => $channelSpec) {
             $driver = $channelSpec['driver'] ?? null;
@@ -32,6 +36,10 @@ class LaravelStdoutLogsHelper
 
     public static function getNamesForStack(string $name): array
     {
+        if (self::isTesting()) {
+            return [$name];
+        }
+
         return ["{$name}:stdout", "{$name}:original"];
     }
 
@@ -66,5 +74,13 @@ class LaravelStdoutLogsHelper
             'stdout_level' => $stdoutLevel,
             'days' => $ttlDays,
         ];
+    }
+
+    protected static function isTesting(): bool {
+        if (!function_exists('env')) {
+            return false;
+        }
+
+        return env('APP_ENV', 'production') == 'testing';
     }
 }
