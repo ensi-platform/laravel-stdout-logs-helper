@@ -70,8 +70,8 @@ class ChannelHelperTest extends TestCase
         $makeChannels = function ($baseLevel, $stdoutLevel) {
             return LaravelStdoutLogsHelper::addStdoutStacks([
                 'channels' => [
-                    'first' => LaravelStdoutLogsHelper::makeDailyChannel('/path/to/file.log', 3, $baseLevel, $stdoutLevel)
-                ]
+                    'first' => LaravelStdoutLogsHelper::makeDailyChannel('/path/to/file.log', 3, $baseLevel, $stdoutLevel),
+                ],
             ]);
         };
 
