@@ -1,86 +1,60 @@
 <?php
 
 use Ensi\LaravelStdoutLogsHelper\LaravelStdoutLogsHelper;
-use PHPUnit\Framework\TestCase;
+use Ensi\LaravelStdoutLogsHelper\Tests\Stubs\ConfigStub;
 
-class ChannelHelperTest extends TestCase
-{
-    private const ORIGINAL_CONFIG = [
-        'default' => 'stack',
-        'channels' => [
-            'first' => [
-                'driver' => 'single',
-                'path' => 'single.log',
-                'level' => 'debug',
+use function PHPUnit\Framework\assertArrayHasKey;
+use function PHPUnit\Framework\assertEquals;
+
+test('addStdoutStacks success', function () {
+    $config = LaravelStdoutLogsHelper::addStdoutStacks(ConfigStub::original(), ['single']);
+
+    assertArrayHasKey('first:stdout', $config['channels']);
+    assertEquals('monolog', $config['channels']['first:stdout']['driver']);
+
+    assertArrayHasKey('first:original', $config['channels']);
+    assertEquals('single', $config['channels']['first:original']['driver']);
+
+    assertArrayHasKey('first', $config['channels']);
+    assertEquals('stack', $config['channels']['first']['driver']);
+
+    assertArrayHasKey('second', $config['channels']);
+    assertEquals('daily', $config['channels']['second']['driver']);
+
+    assertArrayHasKey('other', $config['channels']);
+    assertEquals('slack', $config['channels']['other']['driver']);
+});
+
+test('makeDailyChannel success', function () {
+    $channelSpec = LaravelStdoutLogsHelper::makeDailyChannel('/path/to/file.log');
+    assertArrayHasKey('driver', $channelSpec);
+    assertArrayHasKey('path', $channelSpec);
+    assertArrayHasKey('level', $channelSpec);
+    assertArrayHasKey('days', $channelSpec);
+});
+
+test('makeStdoutChannel success', function () {
+    $channelSpec = LaravelStdoutLogsHelper::makeStdoutChannel();
+    assertArrayHasKey('driver', $channelSpec);
+    assertArrayHasKey('handler', $channelSpec);
+    assertArrayHasKey('level', $channelSpec);
+    assertArrayHasKey('with', $channelSpec);
+});
+
+test('addStdoutStacks level success', function () {
+    $makeChannels = function ($baseLevel, $stdoutLevel) {
+        return LaravelStdoutLogsHelper::addStdoutStacks([
+            'channels' => [
+                'first' => LaravelStdoutLogsHelper::makeDailyChannel('/path/to/file.log', 3, $baseLevel, $stdoutLevel),
             ],
+        ]);
+    };
 
-            'second' => [
-                'driver' => 'daily',
-                'path' => 'daily.log',
-                'level' => 'debug',
-                'days' => 14,
-            ],
+    $config = $makeChannels('debug', null);
+    assertEquals('debug', $config['channels']['first:original']['level']);
+    assertEquals('debug', $config['channels']['first:stdout']['level']);
 
-            'other' => [
-                'driver' => 'slack',
-            ],
-        ],
-    ];
-
-    public function testAddStdoutStacks()
-    {
-        $config = LaravelStdoutLogsHelper::addStdoutStacks(self::ORIGINAL_CONFIG, ['single']);
-
-        $this->assertArrayHasKey('first:stdout', $config['channels']);
-        $this->assertEquals('monolog', $config['channels']['first:stdout']['driver']);
-
-        $this->assertArrayHasKey('first:original', $config['channels']);
-        $this->assertEquals('single', $config['channels']['first:original']['driver']);
-
-        $this->assertArrayHasKey('first', $config['channels']);
-        $this->assertEquals('stack', $config['channels']['first']['driver']);
-
-        $this->assertArrayHasKey('second', $config['channels']);
-        $this->assertEquals('daily', $config['channels']['second']['driver']);
-
-        $this->assertArrayHasKey('other', $config['channels']);
-        $this->assertEquals('slack', $config['channels']['other']['driver']);
-    }
-
-    public function testMakeDailyChannel()
-    {
-        $channelSpec = LaravelStdoutLogsHelper::makeDailyChannel('/path/to/file.log');
-        $this->assertArrayHasKey('driver', $channelSpec);
-        $this->assertArrayHasKey('path', $channelSpec);
-        $this->assertArrayHasKey('level', $channelSpec);
-        $this->assertArrayHasKey('days', $channelSpec);
-    }
-
-    public function makeStdoutChannel()
-    {
-        $channelSpec = LaravelStdoutLogsHelper::makeStdoutChannel();
-        $this->assertArrayHasKey('driver', $channelSpec);
-        $this->assertArrayHasKey('handler', $channelSpec);
-        $this->assertArrayHasKey('level', $channelSpec);
-        $this->assertArrayHasKey('with', $channelSpec);
-    }
-
-    public function testStdoutLogLevel()
-    {
-        $makeChannels = function ($baseLevel, $stdoutLevel) {
-            return LaravelStdoutLogsHelper::addStdoutStacks([
-                'channels' => [
-                    'first' => LaravelStdoutLogsHelper::makeDailyChannel('/path/to/file.log', 3, $baseLevel, $stdoutLevel),
-                ],
-            ]);
-        };
-
-        $config = $makeChannels('debug', null);
-        $this->assertEquals('debug', $config['channels']['first:original']['level']);
-        $this->assertEquals('debug', $config['channels']['first:stdout']['level']);
-
-        $config = $makeChannels('debug', 'info');
-        $this->assertEquals('debug', $config['channels']['first:original']['level']);
-        $this->assertEquals('info', $config['channels']['first:stdout']['level']);
-    }
-}
+    $config = $makeChannels('debug', 'info');
+    assertEquals('debug', $config['channels']['first:original']['level']);
+    assertEquals('info', $config['channels']['first:stdout']['level']);
+});
