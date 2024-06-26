@@ -1,14 +1,31 @@
 # Laravel stdout logs helper
 
-Пакет для дублирования логов в stdout.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ensi/laravel-stdout-logs-helper.svg?style=flat-square)](https://packagist.org/packages/ensi/laravel-stdout-logs-helper)
+[![Tests](https://github.com/ensi-platform/laravel-stdout-logs-helper/actions/workflows/run-tests.yml/badge.svg?branch=master)](https://github.com/ensi-platform/laravel-stdout-logs-helper/actions/workflows/run-tests.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/ensi/laravel-stdout-logs-helper.svg?style=flat-square)](https://packagist.org/packages/ensi/laravel-stdout-logs-helper)
 
-## Установка
+Package for duplicating laravel logs in stdout
 
-1. `composer require ensi/laravel-stdout-logs-helper`
-2. Оберните описание каналов логирования в `config/logging.php` в вызов `LaravelStdoutLogsHelper::addStdoutStacks()`
-3. Добавляйте новые каналы логирования используя вспомогательные функции
+## Installation
 
-Пример:
+You can install the package via composer:
+
+```bash
+composer require ensi/laravel-stdout-logs-helper
+```
+
+## Version Compatibility
+
+| Laravel stdout logs helper | Monolog        | PHP            |
+|----------------------------|----------------|----------------|
+| ^0.1.0                     | ^2.3           | ^7.3 \|\| ^8.0 |
+| ^0.2.0                     | ^2.3           | ^7.3 \|\| ^8.0 |
+| ^0.3.0                     | ^2.0 \|\| ^3.0 | ^7.3 \|\| ^8.0 |
+| ^0.4.0                     | ^2.0 \|\| ^3.0 | ^8.1           |
+
+## Basic usage
+
+Example:
 
 ```
 return LaravelStdoutLogsHelper::addStdoutStacks([
@@ -21,6 +38,19 @@ return LaravelStdoutLogsHelper::addStdoutStacks([
 
 ```
 
-## Лицензия
+## Contributing
 
-[The MIT License (MIT)](LICENSE.md).
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
+### Testing
+
+1. composer install
+2. composer test
+
+## Security Vulnerabilities
+
+Please review [our security policy](.github/SECURITY.md) on how to report security vulnerabilities.
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
