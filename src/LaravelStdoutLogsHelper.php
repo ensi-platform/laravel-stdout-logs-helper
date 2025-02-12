@@ -67,7 +67,7 @@ class LaravelStdoutLogsHelper
         ];
     }
 
-    public static function makeDailyChannel(string $path, int $ttlDays = 14, string $logLevel = 'debug', string $stdoutLevel = null): array
+    public static function makeDailyChannel(string $path, int $ttlDays = 14, string $logLevel = 'debug', ?string $stdoutLevel = null): array
     {
         return [
             'driver' => 'daily',
