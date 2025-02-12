@@ -1,5 +1,5 @@
 {
-    "name": "ensi/laravel-stdout-logs-helper",
+    "name": "c0rtez13/laravel-stdout-logs-helper",
     "description": "laravel stdout logs helper",
     "type": "library",
     "license": "MIT",
@@ -9,9 +9,9 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
-        "pestphp/pest": "^1.22 || ^2.0",
+        "pestphp/pest": "^1.22 || ^2.0 || ^3.0",
         "phpstan/extension-installer": "^1.3",
-        "phpstan/phpstan": "^1.11",
+        "phpstan/phpstan": "^1.11 || ^2.0",
         "spaze/phpstan-disallowed-calls": "^2.15"
     },
     "autoload": {
