@@ -21,7 +21,7 @@ class LaravelStdoutLogsHelper
 
                 $newChannels[$originalName] = $channelSpec;
 
-                $stdoutLevel = $channelSpec['stdout_level'] ?? $channelSpec['level'];
+                $stdoutLevel = $channelSpec['stdout_level'] ?? $channelSpec['level'] ?? $channelSpec['with']['level'] ?? 'debug';
                 $newChannels[$stdoutName] = LogsConfigMaker::stdout($stdoutLevel);
 
                 $newChannels[$name] = LogsConfigMaker::stack($name, [$stdoutName, $originalName]);
