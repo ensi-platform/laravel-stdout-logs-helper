@@ -33,6 +33,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
         string $filename,
         protected ?int $oneFileSizeLimitBytes = null,
         protected ?int $channelSizeLimitBytes = null,
+        protected ?int $channelCountLimit = null,
         string $dateFormat = self::FILE_PER_DAY,
         int|string|Level $level = Level::Debug,
         bool $bubble = true,
@@ -46,6 +47,9 @@ class DateSizeRotatingFileHandler extends StreamHandler
         }
         if (is_null($this->channelSizeLimitBytes)) {
             $this->channelSizeLimitBytes = config('laravel-logs-helper.rotation_size.channel_size_limit_bytes', 0);
+        }
+        if (is_null($this->channelCountLimit)) {
+            $this->channelCountLimit = config('laravel-logs-helper.rotation_size.channel_count_limit', 0);
         }
 
         $this->defaultFilepath = Utils::canonicalizePath($filename);
@@ -90,14 +94,14 @@ class DateSizeRotatingFileHandler extends StreamHandler
         $this->mustRotate = false;
         $this->setActualFileInfo();
 
-        if ($this->channelSizeLimitBytes) {
-            static::rotateFiles($this->findAllLogFiles(), $this->channelSizeLimitBytes);
+        if ($this->channelSizeLimitBytes || $this->channelCountLimit) {
+            static::rotateFiles($this->findAllLogFiles(), $this->channelSizeLimitBytes, $this->channelCountLimit);
         }
 
         static::rotateAllFiles();
     }
 
-    protected static function rotateFiles(array $files, int $maxSumSize): void
+    protected static function rotateFiles(array $files, int $maxSumSize, int $maxCount): void
     {
         if (!$files) {
             return;
@@ -108,7 +112,16 @@ class DateSizeRotatingFileHandler extends StreamHandler
             $totalSize += $logFile->getSizeFile();
         }
 
-        if ($maxSumSize >= $totalSize) {
+        $totalCount = count($files);
+
+        if (!$maxSumSize) {
+            $maxSumSize = $totalSize;
+        }
+        if (!$maxCount) {
+            $maxCount = $totalCount;
+        }
+
+        if ($maxSumSize >= $totalSize && $maxCount >= $totalCount) {
             // no files to remove
             return;
         }
@@ -118,9 +131,11 @@ class DateSizeRotatingFileHandler extends StreamHandler
         do {
             /** @var LogFileData $file */
             $file = array_shift($files);
-            $totalSize -= $file->getSizeFile();
-            $filePath = $file->filePath;
 
+            $totalSize -= $file->getSizeFile();
+            $totalCount--;
+
+            $filePath = $file->filePath;
             if (!file_exists($filePath)) {
                 // if file already deleted by other process, skip current process
                 return;
@@ -131,7 +146,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
                 @unlink($filePath);
             }
 
-        } while ($totalSize > $maxSumSize);
+        } while ($totalSize > $maxSumSize || $totalCount > $maxCount);
     }
 
     protected function rotateAllFiles(): void
@@ -141,7 +156,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
             return;
         }
 
-        static::rotateFiles($this->getGlobalFilesList(), $totalLimit);
+        static::rotateFiles($this->getGlobalFilesList(), $totalLimit, 0);
     }
 
     protected static function sortFiles(array &$files): array

@@ -50,6 +50,7 @@ class LogsConfigMaker
         string $filename,
         ?int $oneFileSizeLimitBytes = null,
         ?int $channelSizeLimitBytes = null,
+        ?int $channelCountLimit = null,
         bool $stdoutMirror = true,
         array $with = [],
     ): array {
@@ -61,6 +62,7 @@ class LogsConfigMaker
                 'filename' => $filename,
                 'oneFileSizeLimitBytes' => $oneFileSizeLimitBytes,
                 'channelSizeLimitBytes' => $channelSizeLimitBytes,
+                'channelCountLimit' => $channelCountLimit,
                 'dateFormat' => DateSizeRotatingFileHandler::FILE_PER_DAY,
             ], $with),
         ];

@@ -102,9 +102,10 @@ To set up such rotation, use the `DateSizeRotatingFileHandler` class. Setting up
 
 To set up size limits (in bytes) use env:
 
-1. LOGS_ROTATION_SIZE_ONE_FILE - limit for one file
-2. LOGS_ROTATION_SIZE_CHANNEL - limit for one channel
-3. LOGS_ROTATION_SIZE_TOTAL - limit for sum of all channels with handler `DateSizeRotatingFileHandler::class`
+1. LOGS_ROTATION_SIZE_ONE_FILE - the limit for one file
+2. LOGS_ROTATION_SIZE_CHANNEL - the limit for one channel
+3. LOGS_ROTATION_COUNT_CHANNEL - the limit for the count of files for one channel
+4. LOGS_ROTATION_SIZE_TOTAL - the limit for sum of all channels with handler `DateSizeRotatingFileHandler::class`
 
 For individual channels, you can redefine the limits using the parameter of the `dailySize` method.
 
