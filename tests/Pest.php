@@ -1,6 +1,6 @@
 <?php
 
-use Ensi\LaravelStdoutLogsHelper\Tests\TestCase;
+use Ensi\LaravelLogsHelper\Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------

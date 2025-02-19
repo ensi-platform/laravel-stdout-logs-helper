@@ -1,6 +1,6 @@
 <?php
 
-namespace Ensi\LaravelStdoutLogsHelper\Tests\Stubs;
+namespace Ensi\LaravelLogsHelper\Tests\Stubs;
 
 class ConfigStub
 {

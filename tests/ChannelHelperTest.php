@@ -1,7 +1,7 @@
 <?php
 
-use Ensi\LaravelStdoutLogsHelper\LaravelStdoutLogsHelper;
-use Ensi\LaravelStdoutLogsHelper\Tests\Stubs\ConfigStub;
+use Ensi\LaravelLogsHelper\LaravelStdoutLogsHelper;
+use Ensi\LaravelLogsHelper\Tests\Stubs\ConfigStub;
 
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
