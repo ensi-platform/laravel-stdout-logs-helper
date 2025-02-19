@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Common;
+namespace Ensi\LaravelLogsHelper\Monolog;
 
 use InvalidArgumentException;
 use Monolog\Handler\StreamHandler;

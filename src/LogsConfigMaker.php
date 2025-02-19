@@ -2,7 +2,7 @@
 
 namespace Ensi\LaravelLogsHelper;
 
-use App\Domain\Common\DateSizeRotatingFileHandler;
+use Ensi\LaravelLogsHelper\Monolog\DateSizeRotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 
 class LogsConfigMaker
