@@ -3,6 +3,7 @@
 use Ensi\LaravelLogsHelper\LaravelStdoutLogsHelper;
 use Ensi\LaravelLogsHelper\LogsConfigMaker;
 use Ensi\LaravelLogsHelper\Tests\Stubs\ConfigStub;
+
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
 
