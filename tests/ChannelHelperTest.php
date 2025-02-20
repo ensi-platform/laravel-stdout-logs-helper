@@ -7,7 +7,7 @@ use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
 
 test('addStdoutStacks success', function () {
-    $config = LaravelStdoutLogsHelper::addStdoutStacks(ConfigStub::original(), ['single']);
+    $config = LaravelStdoutLogsHelper::addStdoutStacks(ConfigStub::original());
 
     assertArrayHasKey('first:stdout', $config['channels']);
     assertEquals('monolog', $config['channels']['first:stdout']['driver']);

@@ -13,6 +13,7 @@ class ConfigStub
                     'driver' => 'single',
                     'path' => 'single.log',
                     'level' => 'debug',
+                    'stdout_mirror' => true,
                 ],
 
                 'second' => [
