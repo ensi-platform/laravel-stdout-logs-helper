@@ -219,7 +219,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
     {
         $files = $this->findAllLogFiles(true);
         $this->sortFiles($files);
-        /** @var LogFileData $file */
+        /** @var LogFileData|null $file */
         $file = end($files);
         if (!$file) {
             $sizeI = 1;
