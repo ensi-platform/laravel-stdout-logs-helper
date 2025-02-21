@@ -2,6 +2,7 @@
 
 namespace Ensi\LaravelLogsHelper\Monolog;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
@@ -25,7 +26,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
     protected string $defaultFilepath; // The original path to the file
     protected LogFileData $logFile; // Data about the current log file
     protected bool|null $mustRotate = null; // true if you need to start writing logs to a new file.
-    protected \DateTimeImmutable $nextDateRotation; // Date for the next rotation
+    protected DateTimeImmutable $nextDateRotation; // Date for the next rotation
     protected string $dateFormat;
     protected string $fileNameRegex;
 
@@ -59,23 +60,23 @@ class DateSizeRotatingFileHandler extends StreamHandler
         $this->close();
 
         parent::__construct($this->url, $level, $bubble, $filePermission, $useLocking);
-
     }
 
     public function close(): void
     {
         parent::close();
 
-        if (true === $this->mustRotate) {
+        if ($this->mustRotate === true) {
             $this->rotate();
         }
     }
 
     protected function write(LogRecord $record): void
     {
-        // on the first record written, if the log is new, we rotate (once per day) after the log has been written so that the new file exists
-        if (null === $this->mustRotate) {
-            $this->mustRotate = null === $this->url || !file_exists($this->url);
+        // on the first record written
+        if (is_null($this->mustRotate)) {
+            // if the log is new, we rotate (once per day) after the log has been written so that the new file exists
+            $this->mustRotate = is_null($this->url) || !file_exists($this->url);
         }
 
         // if the next rotation is expired or size is big, then we rotate immediately
@@ -87,6 +88,10 @@ class DateSizeRotatingFileHandler extends StreamHandler
         }
 
         parent::write($record);
+
+        if ($this->mustRotate === true) {
+            $this->close(); // triggers rotation
+        }
     }
 
     protected function rotate(): void
@@ -245,9 +250,9 @@ class DateSizeRotatingFileHandler extends StreamHandler
         $this->logFile = $this->generateLogFile($this->url);
 
         $this->nextDateRotation = match (str_replace(['/', '_', '.'], '-', $this->dateFormat)) {
-            self::FILE_PER_MONTH => (new \DateTimeImmutable('first day of next month'))->setTime(0, 0),
-            self::FILE_PER_YEAR => (new \DateTimeImmutable('first day of January next year'))->setTime(0, 0),
-            default => (new \DateTimeImmutable('tomorrow'))->setTime(0, 0),
+            self::FILE_PER_MONTH => (new DateTimeImmutable('first day of next month'))->setTime(0, 0),
+            self::FILE_PER_YEAR => (new DateTimeImmutable('first day of January next year'))->setTime(0, 0),
+            default => (new DateTimeImmutable('tomorrow'))->setTime(0, 0),
         };
     }
 
