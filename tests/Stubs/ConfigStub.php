@@ -1,6 +1,6 @@
 <?php
 
-namespace Ensi\LaravelStdoutLogsHelper\Tests\Stubs;
+namespace Ensi\LaravelLogsHelper\Tests\Stubs;
 
 class ConfigStub
 {
@@ -13,6 +13,7 @@ class ConfigStub
                     'driver' => 'single',
                     'path' => 'single.log',
                     'level' => 'debug',
+                    'stdout_mirror' => true,
                 ],
 
                 'second' => [
