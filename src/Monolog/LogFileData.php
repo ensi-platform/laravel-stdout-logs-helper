@@ -14,6 +14,12 @@ class LogFileData
 
     public function getSizeFile(): int
     {
-        return file_exists($this->filePath) ? filesize($this->filePath) : 0;
+        if (!file_exists($this->filePath)) {
+            return 0;
+        }
+
+        clearstatcache(filename: $this->filePath);
+
+        return filesize($this->filePath);
     }
 }
