@@ -3,6 +3,7 @@
 namespace Ensi\LaravelLogsHelper\Monolog;
 
 use DateTimeImmutable;
+use Illuminate\Log\LogManager;
 use InvalidArgumentException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
@@ -238,7 +239,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
         $fileInfo = pathinfo($this->defaultFilepath);
         $resultFilename = str_replace(
             ['{filename}', '{date}', '{size}'],
-            [$fileInfo['filename'], date($this->dateFormat), $sizeI],
+            [$fileInfo['filename'], date($this->dateFormat), (string)$sizeI],
             ($fileInfo['dirname'] ?? '') . '/' . static::FILENAME_FORMAT
         );
 
@@ -324,6 +325,7 @@ class DateSizeRotatingFileHandler extends StreamHandler
 
     protected function loadAllRotatedLogChannels(): void
     {
+        /** @var LogManager $logManager */
         $logManager = logger();
         foreach (config('logging.channels') as $channelName => $channelConfig) {
             $channelDriver = $channelConfig['driver'] ?? null;
